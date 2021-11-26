@@ -13,6 +13,7 @@ import {
   throwError,
 } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
+import { FetchCatServiceService } from '../services/fetch-cat-service.service';
 
 export type CatsTrivia = {
   text: string;
@@ -26,32 +27,24 @@ export class ShowCovidDataComponent implements OnInit {
   @Input() name = '';
 
   cats: CatsTrivia[] | null = null;
-  constructor() {}
+
+  constructor(private fetchCatServiceService: FetchCatServiceService) {}
 
   ngOnInit(): void {
     //op geboorte van component
     //data fetching:
 
-    this.fetchCovidData();
+    //hoe het niet moet om uit te leggen hoe het wel moet.
+
+    this.fetchCatServiceService.apiData
+      .pipe()
+      .subscribe((fromApiCatsTrivia) => (this.cats = fromApiCatsTrivia));
   }
 
   // html ook wel de template
   // het component (deze file) logica van en naar het template (maar kan meer)
   // singletons (paradigm, object waarvan je zeker weet dat er maar 1 is).
   // lifecycle
-
-  private fetchCovidData(): void {
-    const apiData = ajax<CatsTrivia[]>('https://cat-fact.herokuapp.com/facts');
-
-    // verwachtingen Observable (geen promise, geen object (nog niet))
-    // op een observable kunnne we subscriben
-    // een pipe methode kunnen invoegen
-    // Observable.pipe(map(x => x + 1), tap(console.log)).subscribe)
-
-    apiData.pipe(map((x) => x.response)).subscribe((catTrivia) => {
-      this.cats = catTrivia;
-    });
-  }
 }
 
 //impliciet / expliciet
