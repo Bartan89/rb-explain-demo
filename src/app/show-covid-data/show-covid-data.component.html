@@ -1,1 +1,8 @@
-<p>show-covid-data works!</p>
+<h1>Cat knowledge:</h1>
+
+<p>{{ name }}</p>
+
+<p *ngIf="!cats">loading</p>
+<p *ngFor="let cat of cats">
+  {{ cat.text }}
+</p>

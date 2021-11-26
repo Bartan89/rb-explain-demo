@@ -8,9 +8,8 @@ describe('ShowCovidDataComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ShowCovidDataComponent ]
-    })
-    .compileComponents();
+      declarations: [ShowCovidDataComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -23,3 +22,9 @@ describe('ShowCovidDataComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+// TDD -> test driven development
+//
+// streams van data
+// rivier > appelfabriek
+// stream 1 en daarna is ie klaar.

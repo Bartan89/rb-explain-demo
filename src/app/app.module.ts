@@ -6,15 +6,9 @@ import { AppComponent } from './app.component';
 import { ShowCovidDataComponent } from './show-covid-data/show-covid-data.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ShowCovidDataComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  declarations: [AppComponent, ShowCovidDataComponent],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
