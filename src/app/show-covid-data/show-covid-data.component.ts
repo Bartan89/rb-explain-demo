@@ -31,27 +31,37 @@ export class ShowCovidDataComponent implements OnInit {
   constructor(private fetchCatServiceService: FetchCatServiceService) {}
 
   ngOnInit(): void {
-    //op geboorte van component
-    //data fetching:
-
-    //hoe het niet moet om uit te leggen hoe het wel moet.
-
-    this.fetchCatServiceService.apiData
-      .pipe()
-      .subscribe((fromApiCatsTrivia) => (this.cats = fromApiCatsTrivia));
+    this.getCat();
   }
 
-  // html ook wel de template
-  // het component (deze file) logica van en naar het template (maar kan meer)
-  // singletons (paradigm, object waarvan je zeker weet dat er maar 1 is).
-  // lifecycle
+  getCat() {
+    this.fetchCatServiceService.apiData.subscribe(
+      (fromApiCatsTrivia) => (this.cats = fromApiCatsTrivia)
+    );
+  }
 }
 
-//impliciet / expliciet
+// WAAROM TESTEN
 
-// runtime errors >
-// runtime vs compiletime
+// mutatie er niet voor zorgt dat de applicatie kapot gaat
+// guarding logica
+// typo's kunnen testen laten falen
 
-// eerste probleem: we willen makkelijk straks kunnen mocken in de test
-// tweede probleem: we maken de call nu n keer (naar de API).
-// >
+// je gaat je eigen code bevragen, klopt het wel?
+// je krijgt meer inzicht..
+
+// SCOPE BEPALEN
+
+// 1001 testen
+// 'Unit' test
+// Waarom testen we maar een unit. Klein gedeelte van de flow van data.
+
+// MOCKEN
+
+// neppe data
+
+// digitale schuld
+// schuld: ik gebruik wel dependecy injection maar ik weet eigenlijk niet wat het is.
+// Ik gebruik rxjs maar ik weet niet precies wat er gebeurd
+// ik gebruik typescript for runtime type checking maar ik snap het niet.
+// asynchroniteit
