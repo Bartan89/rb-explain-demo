@@ -5,7 +5,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { filter, interval, of, pipe, take, tap } from 'rxjs';
-import { FetchCatServiceService } from '../services/fetch-cat-service.service';
+import { FetchCatServiceService } from '../services/fetch-cat/fetch-cat-service.service';
 import { MockCatTrivia } from './mock-data';
 import { ShowCovidDataComponent } from './show-covid-data.component';
 

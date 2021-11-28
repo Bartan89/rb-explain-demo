@@ -1,0 +1,15 @@
+.modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.767);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+}
+
+.authentication {
+  transform: scale(1.5);
+  color: white;
+  top: 250px;
+  position: absolute;
+}

@@ -1,8 +1,10 @@
-<h1>Cat knowledge:</h1>
+<div class="catTrivia">
+  <h1>Cat knowledge:</h1>
 
-<p>{{ name }}</p>
+  <p>{{ name }}</p>
 
-<p *ngIf="!cats">loading</p>
-<p *ngFor="let cat of cats">
-  {{ cat.text }}
-</p>
+  <p *ngIf="!cats">loading</p>
+  <p *ngFor="let cat of cats">
+    {{ cat.text }}
+  </p>
+</div>

@@ -13,7 +13,7 @@ import {
   throwError,
 } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
-import { FetchCatServiceService } from '../services/fetch-cat-service.service';
+import { FetchCatServiceService } from '../services/fetch-cat/fetch-cat-service.service';
 
 export type CatsTrivia = {
   text: string;
