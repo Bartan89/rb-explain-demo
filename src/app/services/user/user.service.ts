@@ -54,11 +54,26 @@ export class UserService {
 
   loggedInSessionStillValid(): void {
     // een gebruiker mag een paar dagen ingelogt zijn via local storage
+
+    const userLocalStorageState = '"timerStart", "1638189425633"';
+
+    const userAuthState = {
+      timeSinceAuth: 12312309090,
+    };
+
+    const timeLeft = this.fromLocalStorageStringToObject<{
+      timerStart: number;
+    }>(localStorage.getItem('currentUserAuthValid') as string);
+
     const userAuthValid = localStorage.getItem('currentUserAuthValid');
-    console.log(Boolean(userAuthValid));
     if (Boolean(userAuthValid)) {
-      this.userLoggedIn$.next(true);
+      this.userLoggedIn$.next(false);
     }
+
+    // const userAllowedIn = Date.now() - Number(timeLeft.timerStart) < 1000000;
+    // if (!userAllowedIn) {
+    //   this.userLoggedIn$.next(false);
+    // }
   }
 
   signUp(fullCredetials: fullCredetials): any {
@@ -74,8 +89,10 @@ export class UserService {
 
     localStorage.setItem(
       'currentUserAuthValid',
-      `"timerStart", "${Date.now()}"`
+      `+|timerStart|, |${Date.now()}|+,+|TESTKEY1|, |TESTVALUE1|+", "+|TESTKEY2|, |TESTVALUE2|+"`
     );
+    // { timeStart : 23423434,  }
+
     this.userLoggedIn$.next(true);
   }
 
@@ -85,6 +102,22 @@ export class UserService {
     const localStorageQuery = localStorage.getItem(username);
 
     return { user: username, userExsists: Boolean(localStorageQuery) };
+  }
+
+  fromLocalStorageStringToObject<T>(str: string): T {
+    const intermediate = str
+      .split('+')
+      .filter((x, i) => (i % 2 == 1 ? true : false));
+
+    const result = intermediate.reduce((prev, cur, index) => {
+      const key = cur.split('|')[1];
+      const val = intermediate[index]
+        .split('|')
+        .filter((x, i) => (i % 2 == 1 ? true : false))[1];
+      return { ...prev, [key]: val };
+    }, {});
+
+    return result as T;
   }
 }
 

@@ -20,8 +20,6 @@ describe('kat weetjes component', () => {
 
     component.ngOnInit();
 
-    console.log('wat krijg ik hier te zien?', component.cats);
-
     // assertion
     expect(component.cats?.length).toEqual(2);
   });
@@ -40,12 +38,10 @@ describe('kat weetjes component', () => {
     // na 5 seconden
     flush();
     tick(1000);
-    console.log(stopwatch);
     expect(stopwatch).toBe(null);
 
     // na 10 seconden
     tick(10000);
-    console.log(stopwatch);
     expect(stopwatch as unknown as number).toBe(10);
     discardPeriodicTasks();
   }));
@@ -56,7 +52,7 @@ describe('kat weetjes component', () => {
 //   interval(1000)
 //     .pipe(filterFunction)
 //     .subscribe((timer) => {
-//       console.log(timer);
+//
 //     });
 // });
 

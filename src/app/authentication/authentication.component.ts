@@ -17,7 +17,7 @@ import { UserService } from '../services/user/user.service';
   styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
-  showSignIn = false;
+  showSignIn = true;
   userNameExsistsMessage = '';
 
   userLoggedIn$ = this.userService.userLoggedIn$;
@@ -60,6 +60,8 @@ export class AuthenticationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // dit wordt maar 1 keer afgevuurd in de huidige vorm
+    // ook alleen maar als je het component binnenkomt.
     this.userService.loggedInSessionStillValid();
     this.checkUserNameExsists();
   }
