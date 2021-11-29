@@ -8,8 +8,21 @@
 }
 
 .authentication {
+  background-color: white;
   transform: scale(1.5);
-  color: white;
+  color: rgb(0, 0, 0);
   top: 250px;
   position: absolute;
+  padding: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 10px;
+}
+
+button {
+  margin: 10px;
 }

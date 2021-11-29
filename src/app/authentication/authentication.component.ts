@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { filter } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  pipe,
+  tap,
+  throttleTime,
+} from 'rxjs';
 import { UserService } from '../services/user/user.service';
 
 @Component({
@@ -9,7 +17,12 @@ import { UserService } from '../services/user/user.service';
   styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit {
-  showSignIn = true;
+  showSignIn = false;
+  userNameExsistsMessage = '';
+
+  userLoggedIn$ = this.userService.userLoggedIn$;
+
+  notValid = false;
   // dit stuk code > programmeur a. iets veranderd
   authFormSignIn = this.formBuilder.group({
     username: new FormControl(null, [
@@ -23,11 +36,19 @@ export class AuthenticationComponent implements OnInit {
   });
 
   authFormSignUp = this.formBuilder.group({
-    username: new FormControl(null, [
+    name: new FormControl('testuserName', [
       Validators.required,
       Validators.minLength(3),
     ]),
-    password: new FormControl(null, [
+    lastname: new FormControl('testuserLastname', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    username: new FormControl('testuserUserName', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    password: new FormControl('04051989', [
       Validators.required,
       Validators.minLength(3),
     ]),
@@ -38,10 +59,13 @@ export class AuthenticationComponent implements OnInit {
     private userService: UserService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userService.loggedInSessionStillValid();
+    this.checkUserNameExsists();
+  }
 
   // dit stuk code heel ergens anders dan. Waardoor b in de knoei komt.
-  onSubmit(): void {
+  onSignIn(): void {
     if (
       this.authFormSignIn.valid &&
       this.authFormSignIn.get('username')?.value &&
@@ -55,21 +79,48 @@ export class AuthenticationComponent implements OnInit {
     }
   }
 
+  onSignUp(): void {
+    if (this.authFormSignUp.valid) {
+      const input = {
+        username: this.authFormSignUp.get('username')?.value,
+        password: this.authFormSignUp.get('password')?.value,
+        name: this.authFormSignUp.get('name')?.value,
+        lastname: this.authFormSignUp.get('lastname')?.value,
+      };
+
+      // @ts-ignore
+      this.userService.signUp(input);
+      this.notValid = false;
+    } else {
+      this.notValid = true;
+    }
+  }
+
+  checkUserNameExsists() {
+    const obs: Observable<string> | undefined =
+      this.authFormSignUp.get('username')?.valueChanges;
+    obs
+      ?.pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        map((username: string) => this.userService.doesUserExsist(username))
+      )
+      .subscribe((queryLocalStorage) => {
+        if (queryLocalStorage.userExsists) {
+          this.userNameExsistsMessage = `Sorry ${queryLocalStorage.user} is taken`;
+        } else {
+          this.userNameExsistsMessage = ``;
+        }
+      });
+  }
+
   toggleToSignUp() {
     this.showSignIn = !this.showSignIn;
   }
 }
 
-// opiniated
-// Google (angular) bepaald voor ons hoe we iets moeten doen
-// voordeel is consistentie
-// veel out the box
+// compile team type checking
+// runtime
 
-// nadelen
-// minder zelf nadenkt
-// voelt soms als magie
-// bootstrapping
-
-// type guarding
-// guarding -> validatie
-// validatie voor programmeur
+// isn't that expensive?
+// duur / expensive

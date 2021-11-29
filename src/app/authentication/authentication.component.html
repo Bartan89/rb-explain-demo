@@ -1,36 +1,46 @@
-<div class="modal">
+<div *ngIf="!(userLoggedIn$ | async)" class="modal">
   <div class="authentication">
     <form
       *ngIf="showSignIn"
       [formGroup]="authFormSignIn"
-      (ngSubmit)="onSubmit()"
+      (ngSubmit)="onSignIn()"
     >
       <h1>Login:</h1>
       <label e2etag="hello world" for="username">username:</label>
       <input id="username" type="text" formControlName="username" />
       <label for="password">password:</label>
       <input id="password" type="text" formControlName="password" />
-      <button class="button" type="submit">SignIn</button>
+      <button mat-raised-button color="secondary" class="button" type="submit">
+        Sign in
+      </button>
     </form>
 
     <form
       *ngIf="!showSignIn"
       [formGroup]="authFormSignUp"
-      (ngSubmit)="onSubmit()"
+      (ngSubmit)="onSignUp()"
     >
       <h1>Signup:</h1>
+      <label e2etag="hello world" for="username">name:</label>
+      <input id="username" type="text" formControlName="name" />
+      <label for="password">last name:</label>
+      <input id="password" type="text" formControlName="lastname" />
       <label e2etag="hello world" for="username">username:</label>
+      <p>{{ userNameExsistsMessage }}</p>
       <input id="username" type="text" formControlName="username" />
       <label for="password">password:</label>
       <input id="password" type="text" formControlName="password" />
-      <button class="button" type="submit">
-        {{ showSignIn ? "sign in" : "sign up" }}
+      <button mat-raised-button color="secondary" class="button" type="submit">
+        Sign up
       </button>
     </form>
 
-    <button (click)="toggleToSignUp()">
+    <p *ngIf="notValid">The data entered is not valid. Try again</p>
+
+    <button mat-raised-button color="secondary" (click)="toggleToSignUp()">
       {{ showSignIn ? "sign up instead" : "back to sign in" }}
     </button>
+    <button mat-raised-button color="primary">werkt dit?</button>
   </div>
 </div>
 

@@ -1,20 +1,28 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Database } from '../database/local-storage.service';
+import { PasswordEncryptorService } from '../encryption/password-encryptor.service';
+
+type fullCredetials = {
+  name: string;
+  lastname: string;
+  username: string;
+  password: string;
+};
+
+type credentials = Pick<fullCredetials, 'username' | 'password'>;
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  userLoggedIn$ = new BehaviorSubject(false);
+  public userLoggedIn$ = new BehaviorSubject(false);
 
-  constructor() {}
+  constructor(
+    private passwordPasswordEncryptorService: PasswordEncryptorService
+  ) {}
 
-  logIn(credetials: {
-    username: string;
-    password: string;
-  }): Observable<string> {
-    console.log(credetials);
+  logIn(credetials: credentials): Observable<string> {
     const credentialDatabaseMock = [
       { userName: 'Bart', password: 'Welkom123' },
       { userName: 'Robin', password: 'Welkom123' },
@@ -38,16 +46,45 @@ export class UserService {
       );
     }
 
-    console.log(userInDb);
-
     // if(credetials)
     // this.userLoggedIn$.next(true)
 
     return of('string');
   }
 
-  loggedIn(): boolean {
-    return false;
+  loggedInSessionStillValid(): void {
+    // een gebruiker mag een paar dagen ingelogt zijn via local storage
+    const userAuthValid = localStorage.getItem('currentUserAuthValid');
+    console.log(Boolean(userAuthValid));
+    if (Boolean(userAuthValid)) {
+      this.userLoggedIn$.next(true);
+    }
+  }
+
+  signUp(fullCredetials: fullCredetials): any {
+    const encryptedPaswoord =
+      this.passwordPasswordEncryptorService.encryptPasword(
+        fullCredetials.password
+      );
+
+    localStorage.setItem(
+      `${fullCredetials.username}`,
+      `"${fullCredetials.username}", "${fullCredetials.name}", "${fullCredetials?.lastname}", "${encryptedPaswoord}"`
+    );
+
+    localStorage.setItem(
+      'currentUserAuthValid',
+      `"timerStart", "${Date.now()}"`
+    );
+    this.userLoggedIn$.next(true);
+  }
+
+  doesUserExsist(username: string): { user: string; userExsists: boolean } {
+    // null
+    // of key value pair vanuit local storage
+    const localStorageQuery = localStorage.getItem(username);
+
+    return { user: username, userExsists: Boolean(localStorageQuery) };
   }
 }
 
@@ -56,3 +93,9 @@ export class UserService {
 // observable oftewel een 'waarde' waarop gesubcribed kan worden
 // wij willen de waarde injecteren
 // subject en behaviourSubject
+
+// specifiek -> itereren naar generieke service voor loosely coupled architecture
+
+// unique identifier
+// nummer 0, 1
+// username
