@@ -14,6 +14,7 @@ import {
 } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { FetchCatServiceService } from '../services/fetch-cat/fetch-cat-service.service';
+import { UserService } from '../services/user/user.service';
 
 export type CatsTrivia = {
   text: string;
@@ -25,13 +26,21 @@ export type CatsTrivia = {
 })
 export class ShowCovidDataComponent implements OnInit {
   @Input() name = '';
+  userLoggedIn$ = this.userService.userLoggedIn$;
+
+  constructor(
+    private fetchCatServiceService: FetchCatServiceService,
+    private userService: UserService
+  ) {}
 
   cats: CatsTrivia[] | null = null;
 
-  constructor(private fetchCatServiceService: FetchCatServiceService) {}
-
   ngOnInit(): void {
-    this.getCat();
+    this.userService.userLoggedIn$.subscribe((loggedIn) => {
+      if (loggedIn) {
+        this.getCat();
+      }
+    });
   }
 
   getCat() {

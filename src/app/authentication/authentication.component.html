@@ -13,6 +13,9 @@
       <button mat-raised-button color="secondary" class="button" type="submit">
         Sign in
       </button>
+      <p *ngIf="userDidNotSignUp$ | async">
+        User not found, please sign up instead
+      </p>
     </form>
 
     <form

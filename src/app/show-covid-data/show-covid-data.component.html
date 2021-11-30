@@ -1,4 +1,4 @@
-<div class="catTrivia">
+<div *ngIf="userLoggedIn$ | async" class="catTrivia">
   <h1>Cat knowledge:</h1>
 
   <p>{{ name }}</p>

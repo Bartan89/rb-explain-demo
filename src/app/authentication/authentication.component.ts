@@ -19,17 +19,18 @@ import { UserService } from '../services/user/user.service';
 export class AuthenticationComponent implements OnInit {
   showSignIn = true;
   userNameExsistsMessage = '';
-
+  userNameNotTaken = true;
   userLoggedIn$ = this.userService.userLoggedIn$;
-
   notValid = false;
+  userDidNotSignUp$ = this.userService.userDidNotSignUp$;
+
   // dit stuk code > programmeur a. iets veranderd
   authFormSignIn = this.formBuilder.group({
-    username: new FormControl(null, [
+    username: new FormControl('testuser', [
       Validators.required,
       Validators.minLength(3),
     ]),
-    password: new FormControl(null, [
+    password: new FormControl('123', [
       Validators.required,
       Validators.minLength(3),
     ]),
@@ -82,7 +83,7 @@ export class AuthenticationComponent implements OnInit {
   }
 
   onSignUp(): void {
-    if (this.authFormSignUp.valid) {
+    if (this.authFormSignUp.valid && this.userNameNotTaken) {
       const input = {
         username: this.authFormSignUp.get('username')?.value,
         password: this.authFormSignUp.get('password')?.value,
@@ -109,8 +110,10 @@ export class AuthenticationComponent implements OnInit {
       )
       .subscribe((queryLocalStorage) => {
         if (queryLocalStorage.userExsists) {
+          this.userNameNotTaken = false;
           this.userNameExsistsMessage = `Sorry ${queryLocalStorage.user} is taken`;
         } else {
+          this.userNameNotTaken = true;
           this.userNameExsistsMessage = ``;
         }
       });

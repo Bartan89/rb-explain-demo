@@ -18,38 +18,30 @@ type credentials = Pick<fullCredetials, 'username' | 'password'>;
 export class UserService {
   public userLoggedIn$ = new BehaviorSubject(false);
 
+  public userDidNotSignUp$ = new BehaviorSubject(false);
+
   constructor(
     private passwordPasswordEncryptorService: PasswordEncryptorService
   ) {}
 
-  logIn(credetials: credentials): Observable<string> {
+  logIn(credetials: credentials): void {
     const credentialDatabaseMock = [
       { userName: 'Bart', password: 'Welkom123' },
       { userName: 'Robin', password: 'Welkom123' },
     ];
 
-    const userInDb = credentialDatabaseMock.find(
-      (user) => user.userName === credetials.username
-    );
-
-    if (userInDb) {
-      const rightPassword = userInDb.password === credetials.password;
-      console.log(
-        'Is the password correct for user:',
-        userInDb.userName,
-        'passworden given:',
-        credetials.password,
-        'password expeced:',
-        userInDb.password,
-        'they are',
-        rightPassword ? 'the same' : 'not the same'
-      );
+    // vind de gebruiker
+    if (localStorage.getItem(credetials.username)) {
+      this.userLoggedIn$.next(true);
+      this.userDidNotSignUp$.next(false);
+    } else {
+      /// TODO
+      console.log('deze logica afgevuurd');
+      this.userDidNotSignUp$.next(true);
     }
 
     // if(credetials)
     // this.userLoggedIn$.next(true)
-
-    return of('string');
   }
 
   loggedInSessionStillValid(): void {
